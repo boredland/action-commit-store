@@ -1,0 +1,20 @@
+{
+  "name": "action-commit-store",
+  "version": "1.0.0",
+  "description": "github action saving and retrieving values from a storage inside a commit comment",
+  "main": "dist/index.js",
+  "author": "Jonas Strassel <info@jonas-strassel.de>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsup src/index.ts"
+  },
+  "devDependencies": {
+    "@actions/core": "^1.10.0",
+    "@octokit/action": "^4.0.8",
+    "@octokit/plugin-rest-endpoint-methods": "^6.6.2",
+    "@types/node": "^18.8.3",
+    "husky": "^8.0.1",
+    "tsup": "^6.2.3",
+    "typescript": "^4.8.4"
+  }
+}
