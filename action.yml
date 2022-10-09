@@ -2,6 +2,10 @@ name: 'action-commit-store'
 description: 'action using a commit comment as a key value store'
 author: 'Jonas Strassel'
 
+branding:
+  color: orange
+  icon: database
+
 inputs:
   storage-commit-sha:
     required: true
