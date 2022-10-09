@@ -969,8 +969,8 @@ var require_url_state_machine = __commonJS({
       if (input === "") {
         return 0;
       }
-      const regex = R === 10 ? /[^0-9]/ : R === 16 ? /[^0-9A-Fa-f]/ : /[^0-7]/;
-      if (regex.test(input)) {
+      const regex2 = R === 10 ? /[^0-9]/ : R === 16 ? /[^0-9A-Fa-f]/ : /[^0-7]/;
+      if (regex2.test(input)) {
         return failure;
       }
       return parseInt(input, R);
@@ -1705,7 +1705,7 @@ var require_url_state_machine = __commonJS({
       }
       return true;
     };
-    URLStateMachine.prototype["parse path"] = function parsePath(c) {
+    URLStateMachine.prototype["parse path"] = function parsePath2(c) {
       if (isNaN(c) || c === 47 || isSpecial(this.url) && c === 92 || !this.stateOverride && (c === 63 || c === 35)) {
         if (isSpecial(this.url) && c === 92) {
           this.parseError = true;
@@ -6038,7 +6038,7 @@ var require_ms = __commonJS({
       options = options || {};
       var type = typeof val;
       if (type === "string" && val.length > 0) {
-        return parse2(val);
+        return parse3(val);
       } else if (type === "number" && isFinite(val)) {
         return options.long ? fmtLong(val) : fmtShort(val);
       }
@@ -6046,7 +6046,7 @@ var require_ms = __commonJS({
         "val is not a non-empty string or a valid number. val=" + JSON.stringify(val)
       );
     };
-    function parse2(str) {
+    function parse3(str) {
       str = String(str);
       if (str.length > 100) {
         return;
@@ -7328,14 +7328,14 @@ var require_stringify = __commonJS({
     for (let i = 0; i < 256; ++i) {
       byteToHex.push((i + 256).toString(16).substr(1));
     }
-    function stringify(arr, offset = 0) {
+    function stringify2(arr, offset = 0) {
       const uuid = (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
       if (!(0, _validate.default)(uuid)) {
         throw TypeError("Stringified UUID is invalid");
       }
       return uuid;
     }
-    var _default = stringify;
+    var _default = stringify2;
     exports.default = _default;
   }
 });
@@ -7422,7 +7422,7 @@ var require_parse = __commonJS({
     function _interopRequireDefault(obj) {
       return obj && obj.__esModule ? obj : { default: obj };
     }
-    function parse2(uuid) {
+    function parse3(uuid) {
       if (!(0, _validate.default)(uuid)) {
         throw TypeError("Invalid UUID");
       }
@@ -7446,7 +7446,7 @@ var require_parse = __commonJS({
       arr[15] = v & 255;
       return arr;
     }
-    var _default = parse2;
+    var _default = parse3;
     exports.default = _default;
   }
 });
@@ -9194,7 +9194,7 @@ var require_core = __commonJS({
 Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     exports.getBooleanInput = getBooleanInput;
-    function setOutput(name, value2) {
+    function setOutput2(name, value2) {
       const filePath = process.env["GITHUB_OUTPUT"] || "";
       if (filePath) {
         return file_command_1.issueFileCommand("OUTPUT", file_command_1.prepareKeyValueMessage(name, value2));
@@ -9202,16 +9202,16 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       process.stdout.write(os.EOL);
       command_1.issueCommand("set-output", { name }, utils_1.toCommandValue(value2));
     }
-    exports.setOutput = setOutput;
+    exports.setOutput = setOutput2;
     function setCommandEcho(enabled) {
       command_1.issue("echo", enabled ? "on" : "off");
     }
     exports.setCommandEcho = setCommandEcho;
-    function setFailed2(message) {
+    function setFailed(message) {
       process.exitCode = ExitCode.Failure;
       error2(message);
     }
-    exports.setFailed = setFailed2;
+    exports.setFailed = setFailed;
     function isDebug() {
       return process.env["RUNNER_DEBUG"] === "1";
     }
@@ -9300,17 +9300,1051 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
 var import_action = __toESM(require_dist_node2());
 var import_core = __toESM(require_core());
 init_dist_web10();
+
+// node_modules/superjson/dist/esm/double-indexed-kv.js
+var DoubleIndexedKV = function() {
+  function DoubleIndexedKV2() {
+    this.keyToValue = /* @__PURE__ */ new Map();
+    this.valueToKey = /* @__PURE__ */ new Map();
+  }
+  DoubleIndexedKV2.prototype.set = function(key2, value2) {
+    this.keyToValue.set(key2, value2);
+    this.valueToKey.set(value2, key2);
+  };
+  DoubleIndexedKV2.prototype.getByKey = function(key2) {
+    return this.keyToValue.get(key2);
+  };
+  DoubleIndexedKV2.prototype.getByValue = function(value2) {
+    return this.valueToKey.get(value2);
+  };
+  DoubleIndexedKV2.prototype.clear = function() {
+    this.keyToValue.clear();
+    this.valueToKey.clear();
+  };
+  return DoubleIndexedKV2;
+}();
+
+// node_modules/superjson/dist/esm/registry.js
+var Registry = function() {
+  function Registry2(generateIdentifier) {
+    this.generateIdentifier = generateIdentifier;
+    this.kv = new DoubleIndexedKV();
+  }
+  Registry2.prototype.register = function(value2, identifier) {
+    if (this.kv.getByValue(value2)) {
+      return;
+    }
+    if (!identifier) {
+      identifier = this.generateIdentifier(value2);
+    }
+    if (process.env.NODE_ENV !== "production") {
+      var alreadyRegistered = this.kv.getByKey(identifier);
+      if (alreadyRegistered && alreadyRegistered !== value2) {
+        console.debug('Ambiguous class "' + identifier + '", provide a unique identifier.');
+      }
+    }
+    this.kv.set(identifier, value2);
+  };
+  Registry2.prototype.clear = function() {
+    this.kv.clear();
+  };
+  Registry2.prototype.getIdentifier = function(value2) {
+    return this.kv.getByValue(value2);
+  };
+  Registry2.prototype.getValue = function(identifier) {
+    return this.kv.getByKey(identifier);
+  };
+  return Registry2;
+}();
+
+// node_modules/superjson/dist/esm/class-registry.js
+var __extends = function() {
+  var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
+      d2.__proto__ = b2;
+    } || function(d2, b2) {
+      for (var p in b2)
+        if (Object.prototype.hasOwnProperty.call(b2, p))
+          d2[p] = b2[p];
+    };
+    return extendStatics(d, b);
+  };
+  return function(d, b) {
+    if (typeof b !== "function" && b !== null)
+      throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+    extendStatics(d, b);
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+var _ClassRegistry = function(_super) {
+  __extends(_ClassRegistry2, _super);
+  function _ClassRegistry2() {
+    var _this = _super.call(this, function(c) {
+      return c.name;
+    }) || this;
+    _this.classToAllowedProps = /* @__PURE__ */ new Map();
+    return _this;
+  }
+  _ClassRegistry2.prototype.register = function(value2, options) {
+    if (typeof options === "object") {
+      if (options.allowProps) {
+        this.classToAllowedProps.set(value2, options.allowProps);
+      }
+      _super.prototype.register.call(this, value2, options.identifier);
+    } else {
+      _super.prototype.register.call(this, value2, options);
+    }
+  };
+  _ClassRegistry2.prototype.getAllowedProps = function(value2) {
+    return this.classToAllowedProps.get(value2);
+  };
+  return _ClassRegistry2;
+}(Registry);
+var ClassRegistry = new _ClassRegistry();
+
+// node_modules/superjson/dist/esm/symbol-registry.js
+var SymbolRegistry = new Registry(function(s) {
+  var _a2;
+  return (_a2 = s.description) !== null && _a2 !== void 0 ? _a2 : "";
+});
+
+// node_modules/superjson/dist/esm/util.js
+var __read = function(o, n) {
+  var m = typeof Symbol === "function" && o[Symbol.iterator];
+  if (!m)
+    return o;
+  var i = m.call(o), r, ar = [], e;
+  try {
+    while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
+      ar.push(r.value);
+  } catch (error2) {
+    e = { error: error2 };
+  } finally {
+    try {
+      if (r && !r.done && (m = i["return"]))
+        m.call(i);
+    } finally {
+      if (e)
+        throw e.error;
+    }
+  }
+  return ar;
+};
+function valuesOfObj(record) {
+  if ("values" in Object) {
+    return Object.values(record);
+  }
+  var values = [];
+  for (var key2 in record) {
+    if (record.hasOwnProperty(key2)) {
+      values.push(record[key2]);
+    }
+  }
+  return values;
+}
+function find2(record, predicate) {
+  var values = valuesOfObj(record);
+  if ("find" in values) {
+    return values.find(predicate);
+  }
+  var valuesNotNever = values;
+  for (var i = 0; i < valuesNotNever.length; i++) {
+    var value2 = valuesNotNever[i];
+    if (predicate(value2)) {
+      return value2;
+    }
+  }
+  return void 0;
+}
+function forEach(record, run) {
+  Object.entries(record).forEach(function(_a2) {
+    var _b = __read(_a2, 2), key2 = _b[0], value2 = _b[1];
+    return run(value2, key2);
+  });
+}
+function includes(arr, value2) {
+  return arr.indexOf(value2) !== -1;
+}
+function findArr(record, predicate) {
+  for (var i = 0; i < record.length; i++) {
+    var value2 = record[i];
+    if (predicate(value2)) {
+      return value2;
+    }
+  }
+  return void 0;
+}
+
+// node_modules/superjson/dist/esm/custom-transformer-registry.js
+var transfomers = {};
+var CustomTransformerRegistry = {
+  register: function(transformer) {
+    transfomers[transformer.name] = transformer;
+  },
+  findApplicable: function(v) {
+    return find2(transfomers, function(transformer) {
+      return transformer.isApplicable(v);
+    });
+  },
+  findByName: function(name) {
+    return transfomers[name];
+  }
+};
+
+// node_modules/superjson/dist/esm/error-props.js
+var __read2 = function(o, n) {
+  var m = typeof Symbol === "function" && o[Symbol.iterator];
+  if (!m)
+    return o;
+  var i = m.call(o), r, ar = [], e;
+  try {
+    while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
+      ar.push(r.value);
+  } catch (error2) {
+    e = { error: error2 };
+  } finally {
+    try {
+      if (r && !r.done && (m = i["return"]))
+        m.call(i);
+    } finally {
+      if (e)
+        throw e.error;
+    }
+  }
+  return ar;
+};
+var __spreadArray = function(to, from) {
+  for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+    to[j] = from[i];
+  return to;
+};
+var allowedErrorProps = [];
+var allowErrorProps = function() {
+  var props = [];
+  for (var _i = 0; _i < arguments.length; _i++) {
+    props[_i] = arguments[_i];
+  }
+  allowedErrorProps.push.apply(allowedErrorProps, __spreadArray([], __read2(props)));
+};
+
+// node_modules/superjson/dist/esm/is.js
+var getType = function(payload) {
+  return Object.prototype.toString.call(payload).slice(8, -1);
+};
+var isUndefined = function(payload) {
+  return typeof payload === "undefined";
+};
+var isNull = function(payload) {
+  return payload === null;
+};
+var isPlainObject2 = function(payload) {
+  if (getType(payload) !== "Object")
+    return false;
+  if (Object.getPrototypeOf(payload) === null)
+    return true;
+  if (payload === Object.prototype)
+    return false;
+  return payload.constructor === Object && Object.getPrototypeOf(payload) === Object.prototype;
+};
+var isEmptyObject = function(payload) {
+  return isPlainObject2(payload) && Object.keys(payload).length === 0;
+};
+var isArray = function(payload) {
+  return Array.isArray(payload);
+};
+var isString = function(payload) {
+  return typeof payload === "string";
+};
+var isNumber = function(payload) {
+  return typeof payload === "number" && !isNaN(payload);
+};
+var isBoolean = function(payload) {
+  return typeof payload === "boolean";
+};
+var isRegExp = function(payload) {
+  return payload instanceof RegExp;
+};
+var isMap = function(payload) {
+  return payload instanceof Map;
+};
+var isSet = function(payload) {
+  return payload instanceof Set;
+};
+var isSymbol = function(payload) {
+  return getType(payload) === "Symbol";
+};
+var isDate = function(payload) {
+  return payload instanceof Date && !isNaN(payload.valueOf());
+};
+var isError = function(payload) {
+  return payload instanceof Error;
+};
+var isNaNValue = function(payload) {
+  return typeof payload === "number" && isNaN(payload);
+};
+var isPrimitive = function(payload) {
+  return isBoolean(payload) || isNull(payload) || isUndefined(payload) || isNumber(payload) || isString(payload) || isSymbol(payload);
+};
+var isBigint = function(payload) {
+  return typeof payload === "bigint";
+};
+var isInfinite = function(payload) {
+  return payload === Infinity || payload === -Infinity;
+};
+var isTypedArray = function(payload) {
+  return ArrayBuffer.isView(payload) && !(payload instanceof DataView);
+};
+var isURL = function(payload) {
+  return payload instanceof URL;
+};
+
+// node_modules/superjson/dist/esm/pathstringifier.js
+var escapeKey = function(key2) {
+  return key2.replace(/\./g, "\\.");
+};
+var stringifyPath = function(path) {
+  return path.map(String).map(escapeKey).join(".");
+};
+var parsePath = function(string) {
+  var result = [];
+  var segment = "";
+  for (var i = 0; i < string.length; i++) {
+    var char = string.charAt(i);
+    var isEscapedDot = char === "\\" && string.charAt(i + 1) === ".";
+    if (isEscapedDot) {
+      segment += ".";
+      i++;
+      continue;
+    }
+    var isEndOfSegment = char === ".";
+    if (isEndOfSegment) {
+      result.push(segment);
+      segment = "";
+      continue;
+    }
+    segment += char;
+  }
+  var lastSegment = segment;
+  result.push(lastSegment);
+  return result;
+};
+
+// node_modules/superjson/dist/esm/transformer.js
+var __assign = function() {
+  __assign = Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+      for (var p in s)
+        if (Object.prototype.hasOwnProperty.call(s, p))
+          t[p] = s[p];
+    }
+    return t;
+  };
+  return __assign.apply(this, arguments);
+};
+var __read3 = function(o, n) {
+  var m = typeof Symbol === "function" && o[Symbol.iterator];
+  if (!m)
+    return o;
+  var i = m.call(o), r, ar = [], e;
+  try {
+    while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
+      ar.push(r.value);
+  } catch (error2) {
+    e = { error: error2 };
+  } finally {
+    try {
+      if (r && !r.done && (m = i["return"]))
+        m.call(i);
+    } finally {
+      if (e)
+        throw e.error;
+    }
+  }
+  return ar;
+};
+var __spreadArray2 = function(to, from) {
+  for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+    to[j] = from[i];
+  return to;
+};
+function simpleTransformation(isApplicable, annotation, transform, untransform) {
+  return {
+    isApplicable,
+    annotation,
+    transform,
+    untransform
+  };
+}
+var simpleRules = [
+  simpleTransformation(isUndefined, "undefined", function() {
+    return null;
+  }, function() {
+    return void 0;
+  }),
+  simpleTransformation(isBigint, "bigint", function(v) {
+    return v.toString();
+  }, function(v) {
+    if (typeof BigInt !== "undefined") {
+      return BigInt(v);
+    }
+    console.error("Please add a BigInt polyfill.");
+    return v;
+  }),
+  simpleTransformation(isDate, "Date", function(v) {
+    return v.toISOString();
+  }, function(v) {
+    return new Date(v);
+  }),
+  simpleTransformation(isError, "Error", function(v) {
+    var baseError = {
+      name: v.name,
+      message: v.message
+    };
+    allowedErrorProps.forEach(function(prop) {
+      baseError[prop] = v[prop];
+    });
+    return baseError;
+  }, function(v) {
+    var e = new Error(v.message);
+    e.name = v.name;
+    e.stack = v.stack;
+    allowedErrorProps.forEach(function(prop) {
+      e[prop] = v[prop];
+    });
+    return e;
+  }),
+  simpleTransformation(isRegExp, "regexp", function(v) {
+    return "" + v;
+  }, function(regex2) {
+    var body = regex2.slice(1, regex2.lastIndexOf("/"));
+    var flags = regex2.slice(regex2.lastIndexOf("/") + 1);
+    return new RegExp(body, flags);
+  }),
+  simpleTransformation(
+    isSet,
+    "set",
+    function(v) {
+      return __spreadArray2([], __read3(v.values()));
+    },
+    function(v) {
+      return new Set(v);
+    }
+  ),
+  simpleTransformation(isMap, "map", function(v) {
+    return __spreadArray2([], __read3(v.entries()));
+  }, function(v) {
+    return new Map(v);
+  }),
+  simpleTransformation(function(v) {
+    return isNaNValue(v) || isInfinite(v);
+  }, "number", function(v) {
+    if (isNaNValue(v)) {
+      return "NaN";
+    }
+    if (v > 0) {
+      return "Infinity";
+    } else {
+      return "-Infinity";
+    }
+  }, Number),
+  simpleTransformation(function(v) {
+    return v === 0 && 1 / v === -Infinity;
+  }, "number", function() {
+    return "-0";
+  }, Number),
+  simpleTransformation(isURL, "URL", function(v) {
+    return v.toString();
+  }, function(v) {
+    return new URL(v);
+  })
+];
+function compositeTransformation(isApplicable, annotation, transform, untransform) {
+  return {
+    isApplicable,
+    annotation,
+    transform,
+    untransform
+  };
+}
+var symbolRule = compositeTransformation(function(s) {
+  if (isSymbol(s)) {
+    var isRegistered = !!SymbolRegistry.getIdentifier(s);
+    return isRegistered;
+  }
+  return false;
+}, function(s) {
+  var identifier = SymbolRegistry.getIdentifier(s);
+  return ["symbol", identifier];
+}, function(v) {
+  return v.description;
+}, function(_, a) {
+  var value2 = SymbolRegistry.getValue(a[1]);
+  if (!value2) {
+    throw new Error("Trying to deserialize unknown symbol");
+  }
+  return value2;
+});
+var constructorToName = [
+  Int8Array,
+  Uint8Array,
+  Int16Array,
+  Uint16Array,
+  Int32Array,
+  Uint32Array,
+  Float32Array,
+  Float64Array,
+  Uint8ClampedArray
+].reduce(function(obj, ctor) {
+  obj[ctor.name] = ctor;
+  return obj;
+}, {});
+var typedArrayRule = compositeTransformation(isTypedArray, function(v) {
+  return ["typed-array", v.constructor.name];
+}, function(v) {
+  return __spreadArray2([], __read3(v));
+}, function(v, a) {
+  var ctor = constructorToName[a[1]];
+  if (!ctor) {
+    throw new Error("Trying to deserialize unknown typed array");
+  }
+  return new ctor(v);
+});
+function isInstanceOfRegisteredClass(potentialClass) {
+  if (potentialClass === null || potentialClass === void 0 ? void 0 : potentialClass.constructor) {
+    var isRegistered = !!ClassRegistry.getIdentifier(potentialClass.constructor);
+    return isRegistered;
+  }
+  return false;
+}
+var classRule = compositeTransformation(isInstanceOfRegisteredClass, function(clazz) {
+  var identifier = ClassRegistry.getIdentifier(clazz.constructor);
+  return ["class", identifier];
+}, function(clazz) {
+  var allowedProps = ClassRegistry.getAllowedProps(clazz.constructor);
+  if (!allowedProps) {
+    return __assign({}, clazz);
+  }
+  var result = {};
+  allowedProps.forEach(function(prop) {
+    result[prop] = clazz[prop];
+  });
+  return result;
+}, function(v, a) {
+  var clazz = ClassRegistry.getValue(a[1]);
+  if (!clazz) {
+    throw new Error("Trying to deserialize unknown class - check https://github.com/blitz-js/superjson/issues/116#issuecomment-773996564");
+  }
+  return Object.assign(Object.create(clazz.prototype), v);
+});
+var customRule = compositeTransformation(function(value2) {
+  return !!CustomTransformerRegistry.findApplicable(value2);
+}, function(value2) {
+  var transformer = CustomTransformerRegistry.findApplicable(value2);
+  return ["custom", transformer.name];
+}, function(value2) {
+  var transformer = CustomTransformerRegistry.findApplicable(value2);
+  return transformer.serialize(value2);
+}, function(v, a) {
+  var transformer = CustomTransformerRegistry.findByName(a[1]);
+  if (!transformer) {
+    throw new Error("Trying to deserialize unknown custom value");
+  }
+  return transformer.deserialize(v);
+});
+var compositeRules = [classRule, symbolRule, customRule, typedArrayRule];
+var transformValue = function(value2) {
+  var applicableCompositeRule = findArr(compositeRules, function(rule) {
+    return rule.isApplicable(value2);
+  });
+  if (applicableCompositeRule) {
+    return {
+      value: applicableCompositeRule.transform(value2),
+      type: applicableCompositeRule.annotation(value2)
+    };
+  }
+  var applicableSimpleRule = findArr(simpleRules, function(rule) {
+    return rule.isApplicable(value2);
+  });
+  if (applicableSimpleRule) {
+    return {
+      value: applicableSimpleRule.transform(value2),
+      type: applicableSimpleRule.annotation
+    };
+  }
+  return void 0;
+};
+var simpleRulesByAnnotation = {};
+simpleRules.forEach(function(rule) {
+  simpleRulesByAnnotation[rule.annotation] = rule;
+});
+var untransformValue = function(json, type) {
+  if (isArray(type)) {
+    switch (type[0]) {
+      case "symbol":
+        return symbolRule.untransform(json, type);
+      case "class":
+        return classRule.untransform(json, type);
+      case "custom":
+        return customRule.untransform(json, type);
+      case "typed-array":
+        return typedArrayRule.untransform(json, type);
+      default:
+        throw new Error("Unknown transformation: " + type);
+    }
+  } else {
+    var transformation = simpleRulesByAnnotation[type];
+    if (!transformation) {
+      throw new Error("Unknown transformation: " + type);
+    }
+    return transformation.untransform(json);
+  }
+};
+
+// node_modules/superjson/dist/esm/accessDeep.js
+var getNthKey = function(value2, n) {
+  var keys = value2.keys();
+  while (n > 0) {
+    keys.next();
+    n--;
+  }
+  return keys.next().value;
+};
+function validatePath(path) {
+  if (includes(path, "__proto__")) {
+    throw new Error("__proto__ is not allowed as a property");
+  }
+  if (includes(path, "prototype")) {
+    throw new Error("prototype is not allowed as a property");
+  }
+  if (includes(path, "constructor")) {
+    throw new Error("constructor is not allowed as a property");
+  }
+}
+var getDeep = function(object, path) {
+  validatePath(path);
+  path.forEach(function(key2) {
+    object = object[key2];
+  });
+  return object;
+};
+var setDeep = function(object, path, mapper) {
+  validatePath(path);
+  if (path.length === 0) {
+    return mapper(object);
+  }
+  var parent = object;
+  for (var i = 0; i < path.length - 1; i++) {
+    var key2 = path[i];
+    if (isArray(parent)) {
+      var index = +key2;
+      parent = parent[index];
+    } else if (isPlainObject2(parent)) {
+      parent = parent[key2];
+    } else if (isSet(parent)) {
+      var row = +key2;
+      parent = getNthKey(parent, row);
+    } else if (isMap(parent)) {
+      var isEnd = i === path.length - 2;
+      if (isEnd) {
+        break;
+      }
+      var row = +key2;
+      var type = +path[++i] === 0 ? "key" : "value";
+      var keyOfRow = getNthKey(parent, row);
+      switch (type) {
+        case "key":
+          parent = keyOfRow;
+          break;
+        case "value":
+          parent = parent.get(keyOfRow);
+          break;
+      }
+    }
+  }
+  var lastKey = path[path.length - 1];
+  if (isArray(parent) || isPlainObject2(parent)) {
+    parent[lastKey] = mapper(parent[lastKey]);
+  }
+  if (isSet(parent)) {
+    var oldValue = getNthKey(parent, +lastKey);
+    var newValue = mapper(oldValue);
+    if (oldValue !== newValue) {
+      parent["delete"](oldValue);
+      parent.add(newValue);
+    }
+  }
+  if (isMap(parent)) {
+    var row = +path[path.length - 2];
+    var keyToRow = getNthKey(parent, row);
+    var type = +lastKey === 0 ? "key" : "value";
+    switch (type) {
+      case "key": {
+        var newKey = mapper(keyToRow);
+        parent.set(newKey, parent.get(keyToRow));
+        if (newKey !== keyToRow) {
+          parent["delete"](keyToRow);
+        }
+        break;
+      }
+      case "value": {
+        parent.set(keyToRow, mapper(parent.get(keyToRow)));
+        break;
+      }
+    }
+  }
+  return object;
+};
+
+// node_modules/superjson/dist/esm/plainer.js
+var __read4 = function(o, n) {
+  var m = typeof Symbol === "function" && o[Symbol.iterator];
+  if (!m)
+    return o;
+  var i = m.call(o), r, ar = [], e;
+  try {
+    while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
+      ar.push(r.value);
+  } catch (error2) {
+    e = { error: error2 };
+  } finally {
+    try {
+      if (r && !r.done && (m = i["return"]))
+        m.call(i);
+    } finally {
+      if (e)
+        throw e.error;
+    }
+  }
+  return ar;
+};
+var __spreadArray3 = function(to, from) {
+  for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+    to[j] = from[i];
+  return to;
+};
+function traverse(tree, walker2, origin) {
+  if (origin === void 0) {
+    origin = [];
+  }
+  if (!tree) {
+    return;
+  }
+  if (!isArray(tree)) {
+    forEach(tree, function(subtree, key2) {
+      return traverse(subtree, walker2, __spreadArray3(__spreadArray3([], __read4(origin)), __read4(parsePath(key2))));
+    });
+    return;
+  }
+  var _a2 = __read4(tree, 2), nodeValue = _a2[0], children = _a2[1];
+  if (children) {
+    forEach(children, function(child, key2) {
+      traverse(child, walker2, __spreadArray3(__spreadArray3([], __read4(origin)), __read4(parsePath(key2))));
+    });
+  }
+  walker2(nodeValue, origin);
+}
+function applyValueAnnotations(plain, annotations) {
+  traverse(annotations, function(type, path) {
+    plain = setDeep(plain, path, function(v) {
+      return untransformValue(v, type);
+    });
+  });
+  return plain;
+}
+function applyReferentialEqualityAnnotations(plain, annotations) {
+  function apply(identicalPaths, path) {
+    var object = getDeep(plain, parsePath(path));
+    identicalPaths.map(parsePath).forEach(function(identicalObjectPath) {
+      plain = setDeep(plain, identicalObjectPath, function() {
+        return object;
+      });
+    });
+  }
+  if (isArray(annotations)) {
+    var _a2 = __read4(annotations, 2), root = _a2[0], other = _a2[1];
+    root.forEach(function(identicalPath) {
+      plain = setDeep(plain, parsePath(identicalPath), function() {
+        return plain;
+      });
+    });
+    if (other) {
+      forEach(other, apply);
+    }
+  } else {
+    forEach(annotations, apply);
+  }
+  return plain;
+}
+var isDeep = function(object) {
+  return isPlainObject2(object) || isArray(object) || isMap(object) || isSet(object) || isInstanceOfRegisteredClass(object);
+};
+function addIdentity(object, path, identities) {
+  var existingSet = identities.get(object);
+  if (existingSet) {
+    existingSet.push(path);
+  } else {
+    identities.set(object, [path]);
+  }
+}
+function generateReferentialEqualityAnnotations(identitites) {
+  var result = {};
+  var rootEqualityPaths = void 0;
+  identitites.forEach(function(paths) {
+    if (paths.length <= 1) {
+      return;
+    }
+    var _a2 = __read4(paths.map(function(path) {
+      return path.map(String);
+    }).sort(function(a, b) {
+      return a.length - b.length;
+    })), shortestPath = _a2[0], identicalPaths = _a2.slice(1);
+    if (shortestPath.length === 0) {
+      rootEqualityPaths = identicalPaths.map(stringifyPath);
+    } else {
+      result[stringifyPath(shortestPath)] = identicalPaths.map(stringifyPath);
+    }
+  });
+  if (rootEqualityPaths) {
+    if (isEmptyObject(result)) {
+      return [rootEqualityPaths];
+    } else {
+      return [rootEqualityPaths, result];
+    }
+  } else {
+    return isEmptyObject(result) ? void 0 : result;
+  }
+}
+var walker = function(object, identities, path, objectsInThisPath) {
+  var _a2;
+  if (path === void 0) {
+    path = [];
+  }
+  if (objectsInThisPath === void 0) {
+    objectsInThisPath = [];
+  }
+  if (!isPrimitive(object)) {
+    addIdentity(object, path, identities);
+  }
+  if (!isDeep(object)) {
+    var transformed_1 = transformValue(object);
+    if (transformed_1) {
+      return {
+        transformedValue: transformed_1.value,
+        annotations: [transformed_1.type]
+      };
+    } else {
+      return {
+        transformedValue: object
+      };
+    }
+  }
+  if (includes(objectsInThisPath, object)) {
+    return {
+      transformedValue: null
+    };
+  }
+  var transformationResult = transformValue(object);
+  var transformed = (_a2 = transformationResult === null || transformationResult === void 0 ? void 0 : transformationResult.value) !== null && _a2 !== void 0 ? _a2 : object;
+  if (!isPrimitive(object)) {
+    objectsInThisPath = __spreadArray3(__spreadArray3([], __read4(objectsInThisPath)), [object]);
+  }
+  var transformedValue = isArray(transformed) ? [] : {};
+  var innerAnnotations = {};
+  forEach(transformed, function(value2, index) {
+    var recursiveResult = walker(value2, identities, __spreadArray3(__spreadArray3([], __read4(path)), [index]), objectsInThisPath);
+    transformedValue[index] = recursiveResult.transformedValue;
+    if (isArray(recursiveResult.annotations)) {
+      innerAnnotations[index] = recursiveResult.annotations;
+    } else if (isPlainObject2(recursiveResult.annotations)) {
+      forEach(recursiveResult.annotations, function(tree, key2) {
+        innerAnnotations[escapeKey(index) + "." + key2] = tree;
+      });
+    }
+  });
+  if (isEmptyObject(innerAnnotations)) {
+    return {
+      transformedValue,
+      annotations: !!transformationResult ? [transformationResult.type] : void 0
+    };
+  } else {
+    return {
+      transformedValue,
+      annotations: !!transformationResult ? [transformationResult.type, innerAnnotations] : innerAnnotations
+    };
+  }
+};
+
+// node_modules/is-what/dist/index.es.js
+function getType2(payload) {
+  return Object.prototype.toString.call(payload).slice(8, -1);
+}
+function isUndefined2(payload) {
+  return getType2(payload) === "Undefined";
+}
+function isNull2(payload) {
+  return getType2(payload) === "Null";
+}
+function isPlainObject3(payload) {
+  if (getType2(payload) !== "Object")
+    return false;
+  return payload.constructor === Object && Object.getPrototypeOf(payload) === Object.prototype;
+}
+function isArray2(payload) {
+  return getType2(payload) === "Array";
+}
+var isNullOrUndefined = isOneOf(isNull2, isUndefined2);
+function isOneOf(a, b, c, d, e) {
+  return (value2) => a(value2) || b(value2) || !!c && c(value2) || !!d && d(value2) || !!e && e(value2);
+}
+
+// node_modules/copy-anything/dist/index.es.js
+function assignProp(carry, key2, newVal, originalObject, includeNonenumerable) {
+  const propType = {}.propertyIsEnumerable.call(originalObject, key2) ? "enumerable" : "nonenumerable";
+  if (propType === "enumerable")
+    carry[key2] = newVal;
+  if (includeNonenumerable && propType === "nonenumerable") {
+    Object.defineProperty(carry, key2, {
+      value: newVal,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    });
+  }
+}
+function copy(target, options = {}) {
+  if (isArray2(target)) {
+    return target.map((item) => copy(item, options));
+  }
+  if (!isPlainObject3(target)) {
+    return target;
+  }
+  const props = Object.getOwnPropertyNames(target);
+  const symbols = Object.getOwnPropertySymbols(target);
+  return [...props, ...symbols].reduce((carry, key2) => {
+    if (isArray2(options.props) && !options.props.includes(key2)) {
+      return carry;
+    }
+    const val = target[key2];
+    const newVal = copy(val, options);
+    assignProp(carry, key2, newVal, target, options.nonenumerable);
+    return carry;
+  }, {});
+}
+
+// node_modules/superjson/dist/esm/index.js
+var __assign2 = function() {
+  __assign2 = Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+      for (var p in s)
+        if (Object.prototype.hasOwnProperty.call(s, p))
+          t[p] = s[p];
+    }
+    return t;
+  };
+  return __assign2.apply(this, arguments);
+};
+var serialize = function(object) {
+  var identities = /* @__PURE__ */ new Map();
+  var output = walker(object, identities);
+  var res = {
+    json: output.transformedValue
+  };
+  if (output.annotations) {
+    res.meta = __assign2(__assign2({}, res.meta), { values: output.annotations });
+  }
+  var equalityAnnotations = generateReferentialEqualityAnnotations(identities);
+  if (equalityAnnotations) {
+    res.meta = __assign2(__assign2({}, res.meta), { referentialEqualities: equalityAnnotations });
+  }
+  return res;
+};
+var deserialize = function(payload) {
+  var json = payload.json, meta = payload.meta;
+  var result = copy(json);
+  if (meta === null || meta === void 0 ? void 0 : meta.values) {
+    result = applyValueAnnotations(result, meta.values);
+  }
+  if (meta === null || meta === void 0 ? void 0 : meta.referentialEqualities) {
+    result = applyReferentialEqualityAnnotations(result, meta.referentialEqualities);
+  }
+  return result;
+};
+var stringify = function(object) {
+  return JSON.stringify(serialize(object));
+};
+var parse2 = function(string) {
+  return deserialize(JSON.parse(string));
+};
+var registerClass = function(v, options) {
+  return ClassRegistry.register(v, options);
+};
+var registerSymbol = function(v, identifier) {
+  return SymbolRegistry.register(v, identifier);
+};
+var registerCustom = function(transformer, name) {
+  return CustomTransformerRegistry.register(__assign2({ name }, transformer));
+};
+var esm_default = {
+  stringify,
+  parse: parse2,
+  serialize,
+  deserialize,
+  registerClass,
+  registerSymbol,
+  registerCustom,
+  allowErrorProps
+};
+
+// src/index.ts
+var import_process = require("process");
 var Octokit2 = import_action.Octokit.plugin(restEndpointMethods);
 var octokit = new Octokit2();
 var _a;
 var [owner, repo] = ((_a = process.env.GITHUB_REPOSITORY) == null ? void 0 : _a.split("/")) ?? [null, null];
 if (!owner || !repo) {
   (0, import_core.error)("could not determine owner / repo from GITHUB_REPOSITORY");
-  process.exit(0);
+  (0, import_process.exit)(1);
 }
-var storageCommitSha = (0, import_core.getInput)("storage-commit-sha", { required: true });
+var commit_sha = (0, import_core.getInput)("storage-commit-sha", { required: true });
 var key = (0, import_core.getInput)("key", { required: true });
-var value = (0, import_core.getInput)("value", { required: true });
+var value = (0, import_core.getInput)("value", { required: false }) !== "" ? (0, import_core.getInput)("value", { required: false }) : void 0;
+var regex = /<!-- commit-storage = (.*) -->/;
+var main = async () => {
+  var _a2;
+  try {
+    const commit = await octokit.repos.getCommit({ owner, repo, ref: commit_sha });
+  } catch {
+    (0, import_core.error)(`could not find commit ${commit_sha} in this repository`);
+    process.exit(1);
+  }
+  const commitComments = await octokit.repos.listCommentsForCommit({ owner, repo, commit_sha });
+  const comment = commitComments.data.find((comment2) => {
+    var _a3;
+    return ((_a3 = comment2.user) == null ? void 0 : _a3.login) === "github-actions[bot]" && comment2.user.type === "Bot";
+  });
+  const data = esm_default.parse(((_a2 = comment == null ? void 0 : comment.body.match(regex)) == null ? void 0 : _a2.at(1)) ?? '{"json":{}}');
+  (0, import_core.setOutput)("updated", false);
+  if (value && data[key] !== value) {
+    (0, import_core.setOutput)("updated", true);
+    data[key] = value;
+  }
+  if (value) {
+    const body = `<!-- commit-storage = ${esm_default.stringify(data)} -->`;
+    if (!comment)
+      await octokit.repos.createCommitComment({ owner, repo, commit_sha, body });
+    if (comment)
+      await octokit.repos.updateCommitComment({ comment_id: comment.id, owner, repo, commit_sha, body });
+  }
+  (0, import_core.setOutput)("value", data[key]);
+};
+(async function() {
+  await main();
+})();
 /*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
  *

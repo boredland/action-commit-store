@@ -1,0 +1,24 @@
+name: 'action-commit-store'
+description: 'action using a commit comment as a key value store'
+author: 'Jonas Strassel'
+
+inputs:
+  storage-commit-sha:
+    required: true
+    description: 'commit to be used as storage'
+  key: 
+    required: true
+    description: 'key to store in'
+  value:
+    required: false
+    description: 'value to store. returns current value if not set.'
+
+outputs:
+  updated:
+    description: 'true if value has changed'
+  value:
+    description: 'value for given key'
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

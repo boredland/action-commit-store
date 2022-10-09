@@ -1,0 +1,64 @@
+name: 'build-test'
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          yarn --frozen-lockfile
+      - run: |
+          yarn build
+      - name: update a value
+        id: run_id
+        uses: ./
+        with:
+          storage-commit-sha: 13ef52e3a407d9828741990d69dded5a2b65f563
+          key: run_id
+          value: ${{ github.run_id }}
+      - name: update a value (result)
+        run: |
+          echo "value: ${{ steps.run_id.outputs.value }}, updated: ${{ steps.run_id.outputs.updated }}"
+          test ${{ steps.run_id.outputs.updated }} = true
+      - name: indicate if not updated
+        id: identical_run_id
+        uses: ./
+        with:
+          storage-commit-sha: 13ef52e3a407d9828741990d69dded5a2b65f563
+          key: run_id
+          value: ${{ github.run_id }}
+      - name: indicate if not updated (result)
+        run: |
+          echo "value: ${{ steps.identical_run_id.outputs.value }}, updated: ${{ steps.identical_run_id.outputs.updated }}"
+          test ${{ steps.identical_run_id.outputs.updated }} = false
+      - name: set
+        id: set
+        uses: ./
+        with:
+          storage-commit-sha: 13ef52e3a407d9828741990d69dded5a2b65f563
+          key: some
+          value: content
+      - name: set (result)
+        run: |
+          echo "value: ${{ steps.set.outputs.value }}, updated: ${{ steps.set.outputs.updated }}"
+          test ${{ steps.set.outputs.value }} = content
+      - name: get
+        id: get
+        uses: ./
+        with:
+          storage-commit-sha: 13ef52e3a407d9828741990d69dded5a2b65f563
+          key: some
+      - name: get (result)
+        run: |
+          echo "value: ${{ steps.get.outputs.value }}, updated: ${{ steps.get.outputs.updated }}"
+          test ${{ steps.get.outputs.updated }} = false
+          test ${{ steps.get.outputs.value }} = content
