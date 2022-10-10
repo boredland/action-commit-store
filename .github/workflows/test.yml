@@ -62,3 +62,29 @@ jobs:
           echo "value: ${{ steps.get.outputs.value }}, updated: ${{ steps.get.outputs.updated }}"
           test ${{ steps.get.outputs.updated }} = false
           test ${{ steps.get.outputs.value }} = content
+      - name: set encrypted
+        id: set_encrypted
+        uses: ./
+        with:
+          storage-commit-sha: e4c2d3e3d0d865a0ffdfb017e25eb7b59117894e
+          encryption-key: e761daf732c272ee0db9bd71f49c66a0
+          key: some
+          value: secretive content
+      - name: set encrypted (result)
+        run: |
+          echo "value: ${{ steps.set_encrypted.outputs.value }}, updated: ${{ steps.set_encrypted.outputs.updated }}, encrypted: ${{ steps.set_encrypted.outputs.encrypted }}"
+          test "${{ steps.set_encrypted.outputs.value }}" = "secretive content"
+          test "${{ steps.set_encrypted.outputs.encrypted }}" = "true"
+      - name: get encrypted
+        id: get_encrypted
+        uses: ./
+        with:
+          storage-commit-sha: e4c2d3e3d0d865a0ffdfb017e25eb7b59117894e
+          encryption-key: e761daf732c272ee0db9bd71f49c66a0
+          key: some
+      - name: get encrypted (result)
+        run: |
+          echo "value: ${{ steps.get_encrypted.outputs.value }}, updated: ${{ steps.get_encrypted.outputs.updated }}, encrypted: ${{ steps.get_encrypted.outputs.encrypted }}"
+          test ${{ steps.get_encrypted.outputs.updated }} = false
+          test "${{ steps.set_encrypted.outputs.encrypted }}" = "true"
+          test "${{ steps.get_encrypted.outputs.value }}" = "secretive content"

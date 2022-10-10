@@ -9149,10 +9149,10 @@ var require_core = __commonJS({
       command_1.issueCommand("set-env", { name }, convertedVal);
     }
     exports.exportVariable = exportVariable;
-    function setSecret(secret) {
+    function setSecret2(secret) {
       command_1.issueCommand("add-mask", {}, secret);
     }
-    exports.setSecret = setSecret;
+    exports.setSecret = setSecret2;
     function addPath(inputPath) {
       const filePath = process.env["GITHUB_PATH"] || "";
       if (filePath) {
@@ -9293,6 +9293,494 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     Object.defineProperty(exports, "toPlatformPath", { enumerable: true, get: function() {
       return path_utils_1.toPlatformPath;
     } });
+  }
+});
+
+// node_modules/base64-js/index.js
+var require_base64_js = __commonJS({
+  "node_modules/base64-js/index.js"(exports) {
+    "use strict";
+    exports.byteLength = byteLength;
+    exports.toByteArray = toByteArray;
+    exports.fromByteArray = fromByteArray;
+    var lookup = [];
+    var revLookup = [];
+    var Arr = typeof Uint8Array !== "undefined" ? Uint8Array : Array;
+    var code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    for (i = 0, len = code.length; i < len; ++i) {
+      lookup[i] = code[i];
+      revLookup[code.charCodeAt(i)] = i;
+    }
+    var i;
+    var len;
+    revLookup["-".charCodeAt(0)] = 62;
+    revLookup["_".charCodeAt(0)] = 63;
+    function getLens(b64) {
+      var len2 = b64.length;
+      if (len2 % 4 > 0) {
+        throw new Error("Invalid string. Length must be a multiple of 4");
+      }
+      var validLen = b64.indexOf("=");
+      if (validLen === -1)
+        validLen = len2;
+      var placeHoldersLen = validLen === len2 ? 0 : 4 - validLen % 4;
+      return [validLen, placeHoldersLen];
+    }
+    function byteLength(b64) {
+      var lens = getLens(b64);
+      var validLen = lens[0];
+      var placeHoldersLen = lens[1];
+      return (validLen + placeHoldersLen) * 3 / 4 - placeHoldersLen;
+    }
+    function _byteLength(b64, validLen, placeHoldersLen) {
+      return (validLen + placeHoldersLen) * 3 / 4 - placeHoldersLen;
+    }
+    function toByteArray(b64) {
+      var tmp;
+      var lens = getLens(b64);
+      var validLen = lens[0];
+      var placeHoldersLen = lens[1];
+      var arr = new Arr(_byteLength(b64, validLen, placeHoldersLen));
+      var curByte = 0;
+      var len2 = placeHoldersLen > 0 ? validLen - 4 : validLen;
+      var i2;
+      for (i2 = 0; i2 < len2; i2 += 4) {
+        tmp = revLookup[b64.charCodeAt(i2)] << 18 | revLookup[b64.charCodeAt(i2 + 1)] << 12 | revLookup[b64.charCodeAt(i2 + 2)] << 6 | revLookup[b64.charCodeAt(i2 + 3)];
+        arr[curByte++] = tmp >> 16 & 255;
+        arr[curByte++] = tmp >> 8 & 255;
+        arr[curByte++] = tmp & 255;
+      }
+      if (placeHoldersLen === 2) {
+        tmp = revLookup[b64.charCodeAt(i2)] << 2 | revLookup[b64.charCodeAt(i2 + 1)] >> 4;
+        arr[curByte++] = tmp & 255;
+      }
+      if (placeHoldersLen === 1) {
+        tmp = revLookup[b64.charCodeAt(i2)] << 10 | revLookup[b64.charCodeAt(i2 + 1)] << 4 | revLookup[b64.charCodeAt(i2 + 2)] >> 2;
+        arr[curByte++] = tmp >> 8 & 255;
+        arr[curByte++] = tmp & 255;
+      }
+      return arr;
+    }
+    function tripletToBase64(num) {
+      return lookup[num >> 18 & 63] + lookup[num >> 12 & 63] + lookup[num >> 6 & 63] + lookup[num & 63];
+    }
+    function encodeChunk(uint8, start, end) {
+      var tmp;
+      var output = [];
+      for (var i2 = start; i2 < end; i2 += 3) {
+        tmp = (uint8[i2] << 16 & 16711680) + (uint8[i2 + 1] << 8 & 65280) + (uint8[i2 + 2] & 255);
+        output.push(tripletToBase64(tmp));
+      }
+      return output.join("");
+    }
+    function fromByteArray(uint8) {
+      var tmp;
+      var len2 = uint8.length;
+      var extraBytes = len2 % 3;
+      var parts = [];
+      var maxChunkLength = 16383;
+      for (var i2 = 0, len22 = len2 - extraBytes; i2 < len22; i2 += maxChunkLength) {
+        parts.push(encodeChunk(uint8, i2, i2 + maxChunkLength > len22 ? len22 : i2 + maxChunkLength));
+      }
+      if (extraBytes === 1) {
+        tmp = uint8[len2 - 1];
+        parts.push(
+          lookup[tmp >> 2] + lookup[tmp << 4 & 63] + "=="
+        );
+      } else if (extraBytes === 2) {
+        tmp = (uint8[len2 - 2] << 8) + uint8[len2 - 1];
+        parts.push(
+          lookup[tmp >> 10] + lookup[tmp >> 4 & 63] + lookup[tmp << 2 & 63] + "="
+        );
+      }
+      return parts.join("");
+    }
+  }
+});
+
+// node_modules/secure-e2ee/dist/base-encryptor.js
+var require_base_encryptor = __commonJS({
+  "node_modules/secure-e2ee/dist/base-encryptor.js"(exports) {
+    "use strict";
+    var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
+      function adopt(value2) {
+        return value2 instanceof P ? value2 : new P(function(resolve) {
+          resolve(value2);
+        });
+      }
+      return new (P || (P = Promise))(function(resolve, reject) {
+        function fulfilled(value2) {
+          try {
+            step(generator.next(value2));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function rejected(value2) {
+          try {
+            step(generator["throw"](value2));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function step(result) {
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      });
+    };
+    var __generator = exports && exports.__generator || function(thisArg, body) {
+      var _ = { label: 0, sent: function() {
+        if (t[0] & 1)
+          throw t[1];
+        return t[1];
+      }, trys: [], ops: [] }, f, y, t, g;
+      return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() {
+        return this;
+      }), g;
+      function verb(n) {
+        return function(v) {
+          return step([n, v]);
+        };
+      }
+      function step(op) {
+        if (f)
+          throw new TypeError("Generator is already executing.");
+        while (_)
+          try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
+              return t;
+            if (y = 0, t)
+              op = [op[0] & 2, t.value];
+            switch (op[0]) {
+              case 0:
+              case 1:
+                t = op;
+                break;
+              case 4:
+                _.label++;
+                return { value: op[1], done: false };
+              case 5:
+                _.label++;
+                y = op[1];
+                op = [0];
+                continue;
+              case 7:
+                op = _.ops.pop();
+                _.trys.pop();
+                continue;
+              default:
+                if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                  _ = 0;
+                  continue;
+                }
+                if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+                  _.label = op[1];
+                  break;
+                }
+                if (op[0] === 6 && _.label < t[1]) {
+                  _.label = t[1];
+                  t = op;
+                  break;
+                }
+                if (t && _.label < t[2]) {
+                  _.label = t[2];
+                  _.ops.push(op);
+                  break;
+                }
+                if (t[2])
+                  _.ops.pop();
+                _.trys.pop();
+                continue;
+            }
+            op = body.call(thisArg, _);
+          } catch (e) {
+            op = [6, e];
+            y = 0;
+          } finally {
+            f = t = 0;
+          }
+        if (op[0] & 5)
+          throw op[1];
+        return { value: op[0] ? op[1] : void 0, done: true };
+      }
+    };
+    var __importDefault = exports && exports.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : { "default": mod };
+    };
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.BaseEncryptor = void 0;
+    var base64_js_1 = __importDefault(require_base64_js());
+    function isValidSecret(string) {
+      return string.length === 32;
+    }
+    function packMessage(message) {
+      var arr = [
+        message.secretDescriptor,
+        base64_js_1.default.fromByteArray(message.initialisationVector),
+        base64_js_1.default.fromByteArray(message.cipher)
+      ];
+      if (message.authTag) {
+        arr.push(base64_js_1.default.fromByteArray(message.authTag));
+      }
+      return arr.join(":");
+    }
+    function unpackMessage(message) {
+      var _a2 = message.split(":"), secretDescriptor = _a2[0], initialisationVector = _a2[1], cipher = _a2[2], authTag = _a2[3];
+      return {
+        secretDescriptor,
+        initialisationVector: base64_js_1.default.toByteArray(initialisationVector),
+        cipher: base64_js_1.default.toByteArray(cipher),
+        authTag: authTag ? base64_js_1.default.toByteArray(authTag) : void 0
+      };
+    }
+    var BaseEncryptor = function() {
+      function BaseEncryptor2(encryptionSecret, decryptionSecrets) {
+        if (decryptionSecrets === void 0) {
+          decryptionSecrets = [encryptionSecret];
+        }
+        this.encryptionSecret = encryptionSecret;
+        this.decryptionSecretsByDescriptor = {};
+        if (!isValidSecret(encryptionSecret)) {
+          throw new Error("`encryptionSecret` needs to be 32 characters, but was " + encryptionSecret.length + " characters.");
+        }
+        for (var _i = 0, decryptionSecrets_1 = decryptionSecrets; _i < decryptionSecrets_1.length; _i++) {
+          var s = decryptionSecrets_1[_i];
+          if (!isValidSecret(s)) {
+            throw new Error("decryptionSecrets needs to be 32 characters, but was " + s.length + " characters.");
+          }
+          var id = this.getSecretDescriptor(s);
+          this.decryptionSecretsByDescriptor[id] = s;
+        }
+      }
+      BaseEncryptor2.prototype.getSecretDescriptor = function(secret) {
+        return this.md5(secret).slice(0, 4);
+      };
+      BaseEncryptor2.prototype.encrypt = function(input) {
+        return __awaiter(this, void 0, void 0, function() {
+          var secretDescriptor, initialisationVector, _a2, cipher, authTag;
+          return __generator(this, function(_b) {
+            switch (_b.label) {
+              case 0:
+                secretDescriptor = this.getSecretDescriptor(this.encryptionSecret);
+                initialisationVector = this.generateInitialisationVector();
+                return [4, this._encrypt(input, initialisationVector, this.encryptionSecret)];
+              case 1:
+                _a2 = _b.sent(), cipher = _a2[0], authTag = _a2[1];
+                return [2, packMessage({
+                  cipher,
+                  authTag,
+                  initialisationVector,
+                  secretDescriptor
+                })];
+            }
+          });
+        });
+      };
+      BaseEncryptor2.prototype.decrypt = function(string) {
+        return __awaiter(this, void 0, void 0, function() {
+          var _a2, cipher, initialisationVector, secretDescriptor, authTag, key2;
+          return __generator(this, function(_b) {
+            switch (_b.label) {
+              case 0:
+                _a2 = unpackMessage(string), cipher = _a2.cipher, initialisationVector = _a2.initialisationVector, secretDescriptor = _a2.secretDescriptor, authTag = _a2.authTag;
+                key2 = this.decryptionSecretsByDescriptor[secretDescriptor];
+                if (!key2) {
+                  throw new Error("Could not decrypt: No matching secret.");
+                }
+                return [4, this._decrypt(cipher, authTag, initialisationVector, key2)];
+              case 1:
+                return [2, _b.sent()];
+            }
+          });
+        });
+      };
+      return BaseEncryptor2;
+    }();
+    exports.BaseEncryptor = BaseEncryptor;
+  }
+});
+
+// node_modules/secure-e2ee/dist/encryptor.js
+var require_encryptor = __commonJS({
+  "node_modules/secure-e2ee/dist/encryptor.js"(exports) {
+    "use strict";
+    var __extends2 = exports && exports.__extends || function() {
+      var extendStatics = function(d, b) {
+        extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
+          d2.__proto__ = b2;
+        } || function(d2, b2) {
+          for (var p in b2)
+            if (Object.prototype.hasOwnProperty.call(b2, p))
+              d2[p] = b2[p];
+        };
+        return extendStatics(d, b);
+      };
+      return function(d, b) {
+        extendStatics(d, b);
+        function __() {
+          this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+      };
+    }();
+    var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
+      function adopt(value2) {
+        return value2 instanceof P ? value2 : new P(function(resolve) {
+          resolve(value2);
+        });
+      }
+      return new (P || (P = Promise))(function(resolve, reject) {
+        function fulfilled(value2) {
+          try {
+            step(generator.next(value2));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function rejected(value2) {
+          try {
+            step(generator["throw"](value2));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function step(result) {
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      });
+    };
+    var __generator = exports && exports.__generator || function(thisArg, body) {
+      var _ = { label: 0, sent: function() {
+        if (t[0] & 1)
+          throw t[1];
+        return t[1];
+      }, trys: [], ops: [] }, f, y, t, g;
+      return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() {
+        return this;
+      }), g;
+      function verb(n) {
+        return function(v) {
+          return step([n, v]);
+        };
+      }
+      function step(op) {
+        if (f)
+          throw new TypeError("Generator is already executing.");
+        while (_)
+          try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
+              return t;
+            if (y = 0, t)
+              op = [op[0] & 2, t.value];
+            switch (op[0]) {
+              case 0:
+              case 1:
+                t = op;
+                break;
+              case 4:
+                _.label++;
+                return { value: op[1], done: false };
+              case 5:
+                _.label++;
+                y = op[1];
+                op = [0];
+                continue;
+              case 7:
+                op = _.ops.pop();
+                _.trys.pop();
+                continue;
+              default:
+                if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                  _ = 0;
+                  continue;
+                }
+                if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+                  _.label = op[1];
+                  break;
+                }
+                if (op[0] === 6 && _.label < t[1]) {
+                  _.label = t[1];
+                  t = op;
+                  break;
+                }
+                if (t && _.label < t[2]) {
+                  _.label = t[2];
+                  _.ops.push(op);
+                  break;
+                }
+                if (t[2])
+                  _.ops.pop();
+                _.trys.pop();
+                continue;
+            }
+            op = body.call(thisArg, _);
+          } catch (e) {
+            op = [6, e];
+            y = 0;
+          } finally {
+            f = t = 0;
+          }
+        if (op[0] & 5)
+          throw op[1];
+        return { value: op[0] ? op[1] : void 0, done: true };
+      }
+    };
+    var __importDefault = exports && exports.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : { "default": mod };
+    };
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Encryptor = void 0;
+    var crypto_1 = __importDefault(require("crypto"));
+    var base_encryptor_1 = require_base_encryptor();
+    var algo = "aes-256-gcm";
+    var Encryptor2 = function(_super) {
+      __extends2(Encryptor3, _super);
+      function Encryptor3() {
+        return _super !== null && _super.apply(this, arguments) || this;
+      }
+      Encryptor3.prototype.md5 = function(input) {
+        var hash = crypto_1.default.createHash("md5");
+        hash.update(input);
+        return hash.digest("hex");
+      };
+      Encryptor3.prototype.generateInitialisationVector = function() {
+        return crypto_1.default.randomBytes(16);
+      };
+      Encryptor3.prototype._encrypt = function(input, iv, key2) {
+        return __awaiter(this, void 0, void 0, function() {
+          var cipher, encryptedInput;
+          return __generator(this, function(_a2) {
+            cipher = crypto_1.default.createCipheriv(algo, key2, iv, {
+              authTagLength: 16
+            });
+            encryptedInput = Buffer.concat([
+              cipher.update(input, "utf8"),
+              cipher.final()
+            ]);
+            return [2, [encryptedInput, cipher.getAuthTag()]];
+          });
+        });
+      };
+      Encryptor3.prototype._decrypt = function(cipher, authTag, iv, key2) {
+        return __awaiter(this, void 0, void 0, function() {
+          var decipher;
+          return __generator(this, function(_a2) {
+            decipher = crypto_1.default.createDecipheriv(algo, key2, iv, {
+              authTagLength: 16
+            });
+            if (authTag) {
+              decipher.setAuthTag(authTag);
+            }
+            return [2, decipher.update(cipher, "hex", "utf8")];
+          });
+        });
+      };
+      return Encryptor3;
+    }(base_encryptor_1.BaseEncryptor);
+    exports.Encryptor = Encryptor2;
+    exports.default = Encryptor2;
   }
 });
 
@@ -10302,6 +10790,7 @@ var esm_default = {
 
 // src/index.ts
 var import_process = require("process");
+var import_secure_e2ee = __toESM(require_encryptor());
 var Octokit2 = import_action.Octokit.plugin(restEndpointMethods);
 var octokit = new Octokit2();
 var _a;
@@ -10313,6 +10802,8 @@ if (!owner || !repo) {
 var commit_sha = (0, import_core.getInput)("storage-commit-sha", { required: true });
 var key = (0, import_core.getInput)("key", { required: true });
 var value = (0, import_core.getInput)("value", { required: false }) !== "" ? (0, import_core.getInput)("value", { required: false }) : void 0;
+var encryptionKey = (0, import_core.getInput)("encryption-key", { required: false }) !== "" ? (0, import_core.getInput)("encryption-key", { required: false }) : void 0;
+var encryptor = !!encryptionKey ? new import_secure_e2ee.default(encryptionKey) : void 0;
 var regex = /<!-- commit-storage = (.*) -->/;
 var main = async () => {
   var _a2;
@@ -10327,20 +10818,33 @@ var main = async () => {
     var _a3;
     return ((_a3 = comment2.user) == null ? void 0 : _a3.login) === "github-actions[bot]" && comment2.user.type === "Bot";
   });
-  const data = esm_default.parse(((_a2 = comment == null ? void 0 : comment.body.match(regex)) == null ? void 0 : _a2.at(1)) ?? '{"json":{}}');
+  let currentBody = (_a2 = comment == null ? void 0 : comment.body.match(regex)) == null ? void 0 : _a2.at(1);
+  (0, import_core.setOutput)("encrypted", false);
+  if (encryptor && currentBody) {
+    (0, import_core.setOutput)("encrypted", true);
+    currentBody = await encryptor.decrypt(currentBody);
+  }
+  const data = esm_default.parse(currentBody ?? '{"json":{}}');
   (0, import_core.setOutput)("updated", false);
   if (value && data[key] !== value) {
     (0, import_core.setOutput)("updated", true);
     data[key] = value;
   }
   if (value) {
-    const body = `<!-- commit-storage = ${esm_default.stringify(data)} -->`;
+    let dataString = esm_default.stringify(data);
+    if (encryptor) {
+      dataString = await encryptor.encrypt(dataString);
+      (0, import_core.setOutput)("encrypted", true);
+    }
+    let body = `<!-- commit-storage = ${dataString} -->`;
     if (!comment)
       await octokit.repos.createCommitComment({ owner, repo, commit_sha, body });
     if (comment)
       await octokit.repos.updateCommitComment({ comment_id: comment.id, owner, repo, commit_sha, body });
   }
   (0, import_core.setOutput)("value", data[key]);
+  if (encryptor && typeof data[key] === "string")
+    (0, import_core.setSecret)(data[key]);
 };
 (async function() {
   await main();

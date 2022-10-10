@@ -19,10 +19,15 @@ inputs:
   token:
     required: false
     description: 'set the secret.GITHUB_TOKEN either via with or env. ref. https://github.com/octokit/auth-action.js#createactionauth'
+  encryption-key:
+    required: false
+    description: 'optionally provide a 32-character-long secret used for end-to-end encryption of your values'
 
 outputs:
   updated:
     description: 'true if value has changed'
+  encrypted:
+    description: 'true if the state is stored encrypted'
   value:
     description: 'value for given key'
 
