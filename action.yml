@@ -16,6 +16,9 @@ inputs:
   value:
     required: false
     description: 'value to store. returns current value if not set.'
+  token:
+    required: false
+    description: 'set the secret.GITHUB_TOKEN either via with or env. ref. https://github.com/octokit/auth-action.js#createactionauth'
 
 outputs:
   updated:
