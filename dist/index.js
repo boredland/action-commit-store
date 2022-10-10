@@ -10837,10 +10837,20 @@ var main = async () => {
       (0, import_core.setOutput)("encrypted", true);
     }
     let body = `<!-- commit-storage = ${dataString} -->`;
+    let updated;
     if (!comment)
-      await octokit.repos.createCommitComment({ owner, repo, commit_sha, body });
+      updated = await octokit.repos.createCommitComment({ owner, repo, commit_sha, body });
     if (comment)
-      await octokit.repos.updateCommitComment({ comment_id: comment.id, owner, repo, commit_sha, body });
+      updated = await octokit.repos.updateCommitComment({ comment_id: comment.id, owner, repo, commit_sha, body });
+    await octokit.graphql(`
+            mutation {
+              minimizeComment(input: {classifier: OFF_TOPIC, subjectId: "${updated == null ? void 0 : updated.data.node_id}"}) {
+                minimizedComment {
+                  isMinimized
+                }
+              }
+            }
+        `);
   }
   (0, import_core.setOutput)("value", data[key]);
   if (encryptor && typeof data[key] === "string")

@@ -40,7 +40,7 @@ const main = async () => {
     let currentBody = comment?.body.match(regex)?.at(1)
 
     setOutput("encrypted", false)
-    if (encryptor && currentBody) {            
+    if (encryptor && currentBody) {
         setOutput("encrypted", true)
         currentBody = await encryptor.decrypt(currentBody)
     }
@@ -61,12 +61,23 @@ const main = async () => {
             setOutput("encrypted", true)
         }
         let body = `<!-- commit-storage = ${dataString} -->`
-        
+
+        let updated;
         if (!comment)
-            await octokit.repos.createCommitComment({ owner, repo, commit_sha, body })
+            updated = await octokit.repos.createCommitComment({ owner, repo, commit_sha, body })
 
         if (comment)
-            await octokit.repos.updateCommitComment({ comment_id: comment.id, owner, repo, commit_sha, body })
+            updated = await octokit.repos.updateCommitComment({ comment_id: comment.id, owner, repo, commit_sha, body })
+
+        await octokit.graphql(`
+            mutation {
+              minimizeComment(input: {classifier: OFF_TOPIC, subjectId: "${updated?.data.node_id}"}) {
+                minimizedComment {
+                  isMinimized
+                }
+              }
+            }
+        `)
     }
 
     setOutput("value", data[key])
