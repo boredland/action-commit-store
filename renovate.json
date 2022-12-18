@@ -3,5 +3,9 @@
   "extends": [
     "config:base",
     "helpers:pinGitHubActionDigests"
-  ]
+  ],
+  "lockFileMaintenance": {
+    "automerge": true,
+    "enabled": true
+  }
 }
