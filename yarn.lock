@@ -123,14 +123,6 @@
   dependencies:
     "@octokit/types" "^9.0.0"
 
-"@octokit/plugin-rest-endpoint-methods@^6.6.2":
-  version "6.7.0"
-  resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-6.7.0.tgz#2f6f17f25b6babbc8b41d2bb0a95a8839672ce7c"
-  integrity sha512-orxQ0fAHA7IpYhG2flD2AygztPlGYNAdlzYz8yrD8NDgelPfOYoRPROfEyIe035PlxvbYrgkfUZIhSBKju/Cvw==
-  dependencies:
-    "@octokit/types" "^8.0.0"
-    deprecation "^2.3.1"
-
 "@octokit/plugin-rest-endpoint-methods@^7.0.0":
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-7.0.1.tgz#f7ebe18144fd89460f98f35a587b056646e84502"
