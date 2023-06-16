@@ -16,7 +16,7 @@
     "husky": "^8.0.1",
     "secure-e2ee": "^0.4.0",
     "superjson": "^1.10.0",
-    "tsup": "^6.2.3",
+    "tsup": "^7.0.0",
     "typescript": "^5.0.0"
   }
 }
