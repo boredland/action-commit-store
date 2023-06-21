@@ -186,14 +186,14 @@
     fastq "^1.6.0"
 
 "@octokit/action@^6.0.0":
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/@octokit/action/-/action-6.0.3.tgz#00783afab91ccae7099d56c376c974bb9bba5d09"
-  integrity sha512-Ck/38yZH1vfoSDhPJRXAtHwDduO06oHLhmj4wx9Xp473XJol8YwR5hfLT4zvsZWGO3ZEEdkrgZKm4EoqVEhmLw==
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/@octokit/action/-/action-6.0.4.tgz#319d73962600c110a6d7eff1c66201e9377fdcf6"
+  integrity sha512-lRvfUSjlCQWGi2DKSGYxPiu3xxWRrIOJ3i7kKTi+RWW2ejUr9hl/un/amira/Td+WrRAlvlcb7rSCY4hsnRTow==
   dependencies:
     "@octokit/auth-action" "^3.0.0"
     "@octokit/core" "^4.0.0"
     "@octokit/plugin-paginate-rest" "^7.0.0"
-    "@octokit/plugin-rest-endpoint-methods" "^7.0.0"
+    "@octokit/plugin-rest-endpoint-methods" "^8.0.0"
     "@octokit/types" "^10.0.0"
     https-proxy-agent "^7.0.0"
 
@@ -263,6 +263,13 @@
   version "7.2.3"
   resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-7.2.3.tgz#37a84b171a6cb6658816c82c4082ac3512021797"
   integrity sha512-I5Gml6kTAkzVlN7KCtjOM+Ruwe/rQppp0QU372K1GP7kNOYEKe8Xn5BW4sE62JAHdwpq95OQK/qGNyKQMUzVgA==
+  dependencies:
+    "@octokit/types" "^10.0.0"
+
+"@octokit/plugin-rest-endpoint-methods@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-8.0.0.tgz#8e5ecd5a227b95caf664a0203023217a1cbc992f"
+  integrity sha512-GtA8B7zkdxJv2OBVUtUeynu/OkWo272w2IpWC+QCQiUhgrRZ9Zrz2NgAiqYkVhlITGD3PcWYEjy9JR1HrzYtQA==
   dependencies:
     "@octokit/types" "^10.0.0"
 
