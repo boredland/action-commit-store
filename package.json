@@ -11,7 +11,7 @@
   "devDependencies": {
     "@actions/core": "^1.10.0",
     "@octokit/action": "^6.0.0",
-    "@octokit/plugin-rest-endpoint-methods": "^8.0.0",
+    "@octokit/plugin-rest-endpoint-methods": "^9.0.0",
     "@types/node": "^18.8.3",
     "husky": "^8.0.1",
     "secure-e2ee": "^0.4.0",
