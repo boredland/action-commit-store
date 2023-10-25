@@ -247,10 +247,10 @@
   resolved "https://registry.yarnpkg.com/@octokit/openapi-types/-/openapi-types-19.0.0.tgz#0101bf62ab14c1946149a0f8385440963e1253c4"
   integrity sha512-PclQ6JGMTE9iUStpzMkwLCISFn/wDeRjkZFIKALpvJQNBGwDoYYi2fFvuHwssoQ1rXI5mfh6jgTgWuddeUzfWw==
 
-"@octokit/openapi-types@^19.0.1":
-  version "19.0.1"
-  resolved "https://registry.yarnpkg.com/@octokit/openapi-types/-/openapi-types-19.0.1.tgz#b83bd8ef1a6e1a2d88072c87747fa130348ef8fe"
-  integrity sha512-zC+73r2HIoRb9rWW5S3Y759hrpadlD5pNnya/QfZv0JZE7mvMu+FUa7nxHqTadi2hZc4BPZjJ8veDTuJnh8+8g==
+"@octokit/openapi-types@^19.0.2":
+  version "19.0.2"
+  resolved "https://registry.yarnpkg.com/@octokit/openapi-types/-/openapi-types-19.0.2.tgz#d72778fe2f6151314b6f0201fbc771bb741276fc"
+  integrity sha512-8li32fUDUeml/ACRp/njCWTsk5t17cfTM1jp9n08pBrqs5cDFJubtjsSnuz56r5Tad6jdEPJld7LxNp9dNcyjQ==
 
 "@octokit/plugin-paginate-rest@^9.0.0":
   version "9.0.0"
@@ -260,9 +260,9 @@
     "@octokit/types" "^12.0.0"
 
 "@octokit/plugin-rest-endpoint-methods@^10.0.0":
-  version "10.1.0"
-  resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-10.1.0.tgz#0633ba7da42b9333444dd0880ab383a0860662fb"
-  integrity sha512-SnVot2WFI61LYkTeSCkKNfvfqw7FdgtqvaC8nMUwYiHA8UTKoGDjL+R5pCaCEvoLu3O55pUOtNaTIyo7ngJySQ==
+  version "10.1.1"
+  resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-10.1.1.tgz#b9d471cc254130104fd4cf0450164e4f763c722a"
+  integrity sha512-yDinjvUmNMGiUVkzNafNer0wvJ6XDZf3Xd2W6RUTMJX7dp21KrISjYRvCd92xWFjLNadJlBBHz3ndsfoizeM1Q==
   dependencies:
     "@octokit/types" "^12.1.0"
 
@@ -294,11 +294,11 @@
     "@octokit/openapi-types" "^19.0.0"
 
 "@octokit/types@^12.1.0":
-  version "12.1.0"
-  resolved "https://registry.yarnpkg.com/@octokit/types/-/types-12.1.0.tgz#e31f6d524efb9d49206c5b28ab18fd6688f6a12a"
-  integrity sha512-JmjQr5ZbOnpnOLX5drI2O2I1N9suOYZAgINHXTlVVg4lRtUifMv2JssT+RhmNxQwXH153Pc8HaCMdTRkqI1oVQ==
+  version "12.1.1"
+  resolved "https://registry.yarnpkg.com/@octokit/types/-/types-12.1.1.tgz#376726d8435625b3a1b6fcd8cd3e1b03ade939dc"
+  integrity sha512-qnJTldJ1NyGT5MTsCg/Zi+y2IFHZ1Jo5+njNCjJ9FcainV7LjuHgmB697kA0g4MjZeDAJsM3B45iqCVsCLVFZg==
   dependencies:
-    "@octokit/openapi-types" "^19.0.1"
+    "@octokit/openapi-types" "^19.0.2"
 
 "@types/node@^20.0.0":
   version "20.8.9"
