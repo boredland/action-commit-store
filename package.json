@@ -13,7 +13,6 @@
     "@octokit/action": "^6.0.0",
     "@octokit/plugin-rest-endpoint-methods": "^13.0.0",
     "@types/node": "^20.0.0",
-    "husky": "^9.0.0",
     "secure-e2ee": "^0.4.0",
     "superjson": "^2.0.0",
     "tsup": "^8.0.0",
