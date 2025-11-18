@@ -68,16 +68,6 @@ const main = async () => {
 
         if (comment)
             updated = await octokit.repos.updateCommitComment({ comment_id: comment.id, owner, repo, commit_sha, body })
-
-        await octokit.graphql(`
-            mutation {
-              minimizeComment(input: {classifier: OFF_TOPIC, subjectId: "${updated?.data.node_id}"}) {
-                minimizedComment {
-                  isMinimized
-                }
-              }
-            }
-        `)
     }
 
     setOutput("value", data[key])
