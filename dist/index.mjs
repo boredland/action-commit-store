@@ -40032,7 +40032,7 @@ var require_encryptor = /* @__PURE__ */ __commonJS({ "node_modules/secure-e2ee/d
 
 //#endregion
 //#region src/index.ts
-var import_encryptor = /* @__PURE__ */ __toESM(require_encryptor());
+var import_encryptor = /* @__PURE__ */ __toESM(require_encryptor(), 1);
 const octokit = new (Octokit.plugin(restEndpointMethods))();
 const [owner, repo] = process.env.GITHUB_REPOSITORY?.split("/") ?? [null, null];
 if (!owner || !repo) {
