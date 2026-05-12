@@ -3,7 +3,7 @@ import { getInput, error, setOutput, setSecret } from '@actions/core'
 import { restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
 import JSON from 'superjson';
 import { exit } from "process";
-import Encryptor from "secure-e2ee";
+import { Encryptor } from "secure-e2ee";
 
 const Octokit = OriginalOctokit.plugin(restEndpointMethods)
 const octokit = new Octokit();
