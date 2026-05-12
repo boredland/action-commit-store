@@ -35,7 +35,7 @@ const main = async () => {
 
     const commitComments = await octokit.repos.listCommentsForCommit({ owner, repo, commit_sha: commit_sha })
 
-    const comment = commitComments.data.find(comment => comment.user?.login === 'github-actions[bot]' && comment.user.type === 'Bot')
+    const comment = commitComments.data.find(comment => regex.test(comment.body ?? ''))
 
     let currentBody = comment?.body.match(regex)?.at(1)
 

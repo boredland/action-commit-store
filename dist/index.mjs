@@ -41426,7 +41426,7 @@ const main = async () => {
 		owner,
 		repo,
 		commit_sha
-	})).data.find((comment) => comment.user?.login === "github-actions[bot]" && comment.user.type === "Bot");
+	})).data.find((comment) => regex.test(comment.body ?? ""));
 	let currentBody = comment?.body.match(regex)?.at(1);
 	setOutput("encrypted", false);
 	if (encryptor && currentBody) {
