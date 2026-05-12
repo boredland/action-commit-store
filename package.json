@@ -17,6 +17,6 @@
     "secure-e2ee": "^0.4.0",
     "superjson": "^2.2.5",
     "tsdown": "^0.16.5",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.0"
   }
 }
