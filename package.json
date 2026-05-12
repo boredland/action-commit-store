@@ -6,17 +6,17 @@
   "author": "Jonas Strassel <info@jonas-strassel.de>",
   "license": "MIT",
   "scripts": {
-    "build": "tsdown src/index.ts"
+    "build": "tsdown"
   },
   "type": "module",
   "devDependencies": {
-    "@actions/core": "^1.11.1",
+    "@actions/core": "^3.0.1",
     "@octokit/action": "^8.0.4",
     "@octokit/plugin-rest-endpoint-methods": "^17.0.0",
-    "@types/node": "^24.10.1",
+    "@types/node": "^25.7.0",
     "secure-e2ee": "^0.4.0",
-    "superjson": "^2.2.5",
-    "tsdown": "^0.16.5",
-    "typescript": "^5.9.3"
+    "superjson": "^2.2.6",
+    "tsdown": "^0.22.0",
+    "typescript": "^6.0.3"
   }
 }
