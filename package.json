@@ -13,7 +13,7 @@
     "@actions/core": "^3.0.1",
     "@octokit/action": "^8.0.4",
     "@octokit/plugin-rest-endpoint-methods": "^17.0.0",
-    "@types/node": "^25.7.0",
+    "@types/node": "^26.0.0",
     "secure-e2ee": "^0.4.0",
     "superjson": "^2.2.6",
     "tsdown": "^0.22.0",
