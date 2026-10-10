@@ -16,7 +16,7 @@
     "@types/node": "^26.0.0",
     "secure-e2ee": "^0.4.0",
     "superjson": "^2.2.6",
-    "tsdown": "^0.22.0",
+    "tsdown": "^0.23.0",
     "typescript": "^7.0.0"
   }
 }
